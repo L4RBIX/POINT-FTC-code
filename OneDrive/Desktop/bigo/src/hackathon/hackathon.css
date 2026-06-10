@@ -1,0 +1,430 @@
+/* Haiku Hackathon checkpoint system */
+.hk-page {
+  --hk-accent: #534ab7;
+  --hk-accent-soft: rgba(83, 74, 183, 0.18);
+  --hk-accent-glow: rgba(83, 74, 183, 0.4);
+  --hk-done-fg: #3b6d11;
+  --hk-done-bg: #eaf3de;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.hk-header {
+  border-bottom: 1px solid var(--border);
+  padding-block: 1rem;
+}
+
+.hk-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hk-header__logo img {
+  height: 28px;
+  width: auto;
+}
+
+.hk-header__back {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: rgba(224, 224, 224, 0.65);
+  transition: color 0.2s;
+}
+
+.hk-header__back:hover {
+  color: var(--hk-accent);
+}
+
+.hk-main {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem);
+  max-width: 760px;
+}
+
+.hk-label {
+  color: var(--hk-accent);
+}
+
+.hk-title {
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 600;
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.hk-intro {
+  color: rgba(224, 224, 224, 0.75);
+  max-width: 38rem;
+  margin-bottom: 3rem;
+}
+
+/* Timeline */
+.hk-timeline {
+  list-style: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hk-timeline::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+}
+
+.hk-card {
+  position: relative;
+  display: flex;
+  gap: 1.25rem;
+}
+
+.hk-card__marker {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  color: rgba(224, 224, 224, 0.6);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.hk-card__body {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+}
+
+/* States */
+.hk-card--active .hk-card__marker {
+  border-color: var(--hk-accent);
+  color: #fff;
+  background: var(--hk-accent);
+  box-shadow: 0 0 16px var(--hk-accent-glow);
+}
+
+.hk-card--active .hk-card__body {
+  border-color: var(--hk-accent);
+  box-shadow:
+    0 0 0 1px var(--hk-accent-soft),
+    0 8px 40px rgba(83, 74, 183, 0.12);
+}
+
+.hk-card--done .hk-card__marker {
+  border-color: var(--hk-done-fg);
+  background: var(--hk-done-bg);
+  color: var(--hk-done-fg);
+}
+
+.hk-card--done .hk-card__body {
+  border-color: rgba(59, 109, 17, 0.45);
+}
+
+.hk-card--locked .hk-card__body,
+.hk-card--locked .hk-card__marker {
+  opacity: 0.55;
+}
+
+.hk-card--future .hk-card__body,
+.hk-card--future .hk-card__marker {
+  opacity: 0.45;
+}
+
+.hk-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.hk-card__title {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.hk-card__subtitle {
+  font-size: 0.85rem;
+  color: rgba(224, 224, 224, 0.6);
+  margin-top: 0.25rem;
+}
+
+.hk-card__deadline {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: rgba(224, 224, 224, 0.65);
+  margin-bottom: 1rem;
+}
+
+.hk-card__tz {
+  color: rgba(224, 224, 224, 0.4);
+}
+
+.hk-card__note {
+  font-size: 0.9rem;
+  color: rgba(224, 224, 224, 0.6);
+}
+
+/* Badges */
+.hk-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.65rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.hk-badge--done {
+  color: var(--hk-done-fg);
+  background: var(--hk-done-bg);
+}
+
+.hk-badge--active {
+  color: #fff;
+  background: var(--hk-accent);
+}
+
+.hk-badge--locked {
+  color: rgba(224, 224, 224, 0.7);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+/* Countdown */
+.hk-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(83, 74, 183, 0.08);
+  border: 1px solid var(--hk-accent-soft);
+  border-radius: 4px;
+}
+
+.hk-countdown__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(224, 224, 224, 0.55);
+}
+
+.hk-countdown__time {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--hk-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Forms */
+.hk-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hk-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hk-field__label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: rgba(224, 224, 224, 0.85);
+}
+
+.hk-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-heading);
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 0.7rem 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.hk-input:focus {
+  outline: none;
+  border-color: var(--hk-accent);
+  box-shadow: 0 0 0 3px var(--hk-accent-soft);
+}
+
+.hk-input::placeholder {
+  color: rgba(224, 224, 224, 0.35);
+}
+
+select.hk-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e0e0e0' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  cursor: pointer;
+}
+
+.hk-textarea {
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.55;
+}
+
+.hk-input--file {
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+.hk-input--file::file-selector-button {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-heading);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.4rem 0.8rem;
+  margin-right: 0.9rem;
+  cursor: pointer;
+}
+
+.hk-field__hint {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(224, 224, 224, 0.45);
+}
+
+.hk-field__error {
+  font-size: 0.8rem;
+  color: #ff6b6b;
+}
+
+.hk-server-error {
+  font-size: 0.85rem;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 4px;
+  padding: 0.7rem 0.9rem;
+}
+
+.hk-submit {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--hk-accent);
+  border: 1px solid var(--hk-accent);
+  border-radius: 4px;
+  padding: 0.85rem 1.75rem;
+  transition: background 0.2s, box-shadow 0.3s, opacity 0.2s;
+}
+
+.hk-submit:hover:not(:disabled) {
+  background: #6359cf;
+  box-shadow: 0 0 24px var(--hk-accent-glow);
+}
+
+.hk-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Submitted summary */
+.hk-summary__confirm {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--hk-done-fg);
+  background: var(--hk-done-bg);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.hk-summary__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.hk-summary__list div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.hk-summary__list dt {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(224, 224, 224, 0.45);
+}
+
+.hk-summary__list dd {
+  font-size: 0.9rem;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.hk-summary__list a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 540px) {
+  .hk-card {
+    gap: 0.85rem;
+  }
+
+  .hk-card__marker {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .hk-timeline::before {
+    left: 15px;
+  }
+
+  .hk-card__body {
+    padding: 1.1rem;
+  }
+
+  .hk-submit {
+    align-self: stretch;
+  }
+}
